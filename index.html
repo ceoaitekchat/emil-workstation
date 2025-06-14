@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dictation App</title>
+    <link rel="stylesheet" href="/index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@^0.8.0",
+    "marked": "https://esm.sh/marked@^4.0.0",
+    "firebase/": "https://esm.sh/firebase@^11.9.1/"
+  }
+}
+</script>
+  </head>
+  <body class="light-mode">
+    <div class="app-container">
+      <div class="main-content">
+        <div class="note-area">
+          <div class="note-header">
+            <div class="editor-title" contenteditable="true" placeholder="Untitled Note">
+              Untitled Note
+            </div>
+            <div class="tab-navigation-container">
+              <div class="tab-navigation">
+                <button class="tab-button active" data-tab="multispeaker">Multi Speaker</button>
+                <button class="tab-button" data-tab="raw">Raw</button>
+                <button class="tab-button" data-tab="medtopic">MedTopic</button>
+                <div class="active-tab-indicator"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="note-content-wrapper">
+            <div
+              id="multiSpeakerNote"
+              class="note-content active"
+              contenteditable="true"
+              placeholder="Multi-speaker transcription will appear here..."
+            ></div>
+            <div
+              id="rawTranscription"
+              class="note-content"
+              contenteditable="true"
+              placeholder="Raw transcription will appear here..."
+            ></div>
+            <div
+              id="medTopicContent"
+              class="note-content"
+            >
+              <div class="medtopic-section">
+                <div class="checkbox-container">
+                  <input type="checkbox" id="medTopicCheckbox" name="medTopicCheckbox" />
+                  <label for="medTopicCheckbox">Enable Medical Term Focus</label>
+                </div>
+              </div>
+
+              <div class="medtopic-section">
+                <button id="topicDataUploadButton" class="record-control-button button-utility medtopic-button">Upload Topic File (.txt)</button>
+                <input type="file" id="topicDataUploadInput" accept=".txt" style="display: none;" />
+                <span id="topicFileNameDisplay" class="file-name-display">No topic file selected.</span>
+                <div class="checkbox-container">
+                  <input type="checkbox" id="useUploadedTopicDataCheckbox" name="useUploadedTopicDataCheckbox" />
+                  <label for="useUploadedTopicDataCheckbox">Use Uploaded Topic Data</label>
+                </div>
+              </div>
+
+              <div class="medtopic-section">
+                <label for="medTopicTextInput" class="medtopic-label">Additional Medical Terms/Context:</label>
+                <textarea id="medTopicTextInput" class="medtopic-textarea" placeholder="Enter specific medical terms, drug names, conditions, etc. to improve transcription accuracy. One term or phrase per line is recommended."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="recording-interface">
+          <div id="liveRecordingTitle" class="live-recording-title" style="display: none">
+            Recording
+          </div>
+          <canvas id="liveWaveformCanvas" style="display: none"></canvas>
+          <div id="liveRecordingTimerDisplay" class="live-recording-timer" style="display: none">
+            00:00.00
+          </div>
+
+          <div class="status-indicator">
+            <span id="recordingStatus" class="status-text">Ready</span>
+          </div>
+
+          <div class="recording-controls">
+            <button id="startButton" class="record-control-button button-start">Start Recording</button>
+            
+            <div class="pause-resume-container hidden">
+              <button id="pauseButton" class="record-control-button button-pause">Pause</button>
+              <button id="resumeButton" class="record-control-button button-resume hidden">Resume</button>
+            </div>
+            
+            <button id="stopButton" class="record-control-button button-stop hidden">Stop & Transcribe</button>
+            
+            <button id="uploadButtonLabel" class="record-control-button button-upload">Upload Audio File</button>
+            <input type="file" id="audioFileInput" accept="audio/*" style="display: none;" />
+            <span id="fileNameDisplay" class="file-name-display">No file selected.</span>
+
+            <div class="utility-buttons-container">
+              <button id="copyButton" class="record-control-button button-utility">Copy</button>
+              <button id="themeToggleButtonApp" class="record-control-button button-utility">Toggle Theme</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="micStatus" class="debug-panel"></div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const tabNav = document.querySelector(".tab-navigation");
+        const tabButtons = tabNav.querySelectorAll(".tab-button");
+        const activeTabIndicator = tabNav.querySelector(".active-tab-indicator");
+        const noteContents = document.querySelectorAll(".note-content");
+
+        function setActiveTab(activeButton, skipAnimation = false) {
+          if (!activeButton || !activeTabIndicator) return;
+
+          tabButtons.forEach((btn) => btn.classList.remove("active"));
+          activeButton.classList.add("active");
+
+          const tabName = activeButton.getAttribute("data-tab");
+          noteContents.forEach((content) => content.classList.remove("active"));
+
+          if (tabName === "raw") {
+            document.getElementById("rawTranscription").classList.add("active");
+          } else if (tabName === "multispeaker") {
+            document.getElementById("multiSpeakerNote").classList.add("active");
+          } else if (tabName === "medtopic") {
+            document.getElementById("medTopicContent").classList.add("active");
+          }
+
+
+          const originalTransition = activeTabIndicator.style.transition;
+          if (skipAnimation) {
+            activeTabIndicator.style.transition = "none";
+          } else {
+            activeTabIndicator.style.transition = "";
+          }
+
+          activeTabIndicator.style.left = `${activeButton.offsetLeft}px`;
+          activeTabIndicator.style.width = `${activeButton.offsetWidth}px`;
+
+          if (skipAnimation) {
+            activeTabIndicator.offsetHeight; // Trigger reflow
+            activeTabIndicator.style.transition = originalTransition;
+          }
+        }
+
+        tabButtons.forEach((button) => {
+          button.addEventListener("click", (e) => {
+            setActiveTab(e.currentTarget);
+          });
+        });
+
+        const initiallyActiveButton = tabNav.querySelector(".tab-button.active");
+        if (initiallyActiveButton) {
+          requestAnimationFrame(() => {
+            setActiveTab(initiallyActiveButton, true);
+          });
+        }
+
+        window.addEventListener("resize", () => {
+          requestAnimationFrame(() => {
+            const currentActiveButton = tabNav.querySelector(".tab-button.active");
+            if (currentActiveButton) {
+              setActiveTab(currentActiveButton, true);
+            }
+          });
+        });
+      });
+    </script>
+     <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        document
+          .querySelectorAll('[contenteditable][placeholder]')
+          .forEach((el) => {
+            const placeholder = el.getAttribute('placeholder')!;
+
+            function updatePlaceholderState() {
+              const currentText = el.textContent?.trim();
+              if (currentText === '' || currentText === placeholder) {
+                if (currentText === '') {
+                   el.textContent = placeholder;
+                }
+                el.classList.add('placeholder-active');
+              } else {
+                el.classList.remove('placeholder-active');
+              }
+            }
+
+            updatePlaceholderState(); 
+
+            el.addEventListener('focus', function () {
+              const currentText = this.textContent?.trim();
+              if (currentText === placeholder) {
+                this.textContent = '';
+                this.classList.remove('placeholder-active');
+              }
+            });
+
+            el.addEventListener('blur', function () {
+              updatePlaceholderState();
+            });
+            (el as any).refreshPlaceholder = updatePlaceholderState;
+          });
+      });
+    </script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
