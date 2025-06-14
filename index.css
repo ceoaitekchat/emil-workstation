@@ -1,0 +1,680 @@
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css);
+@import url(https://fonts.cdnfonts.com/css/sf-mono);
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg-dark: #121212;
+  --color-bg-alt-dark: #1E1E1E;
+  --color-surface-dark: rgba(255, 255, 255, 0.05);
+  --color-surface-hover-dark: rgba(255, 255, 255, 0.08);
+  --color-surface-active-dark: rgba(255, 255, 255, 0.12);
+  --color-text-dark: #E1E1E1;
+  --color-text-secondary-dark: #A8A8A8;
+  --color-text-tertiary-dark: #7F7F7F;
+  --color-accent-dark: #82aaff;
+  --color-accent-alt-dark: #c792ea;
+  --color-cursor-dark: var(--color-accent-dark);
+  --color-border-dark: rgba(255, 255, 255, 0.12);
+  --color-recording-dark: #ff453a; /* Waveform color */
+  --color-success-dark: #32d74b;
+
+  --glass-bg-dark: rgba(30, 30, 30, 0.6);
+  --glass-border-dark: rgba(255, 255, 255, 0.15);
+  --glass-highlight-dark: rgba(255, 255, 255, 0.1);
+  --glass-shadow-dark: rgba(0, 0, 0, 0.3);
+
+  --glass-recording-bg-dark: rgba(28, 28, 30, 0.75);
+  --glass-recording-border-dark: rgba(255, 255, 255, 0.15);
+
+  --color-bg-light: #F7F7F7;
+  --color-bg-alt-light: #EDEDED;
+  --color-surface-light: #FFFFFF;
+  --color-surface-hover-light: #F0F0F0;
+  --color-surface-active-light: #EAEAEA;
+  --color-text-light: #333333;
+  --color-text-secondary-light: #666666;
+  --color-text-tertiary-light: #999999;
+  --color-accent-light: #007AFF;
+  --color-accent-alt-light: #5856d6;
+  --color-cursor-light: var(--color-accent-light);
+  --color-border-light: #DCDCDC;
+  --color-recording-light: #ff3b30; /* Waveform color */
+  --color-success-light: #30d158;
+
+  --glass-bg-light: rgba(255, 255, 255, 0.65);
+  --glass-border-light: rgba(0, 0, 0, 0.07);
+  --glass-highlight-light: var(--color-surface-active-light);
+  --glass-shadow-light: rgba(0, 0, 0, 0.05);
+
+  --glass-recording-bg-light: rgba(248, 248, 248, 0.75);
+  --glass-recording-border-light: rgba(0, 0, 0, 0.1);
+
+  /* Default to light mode variables now */
+  --color-bg: var(--color-bg-light);
+  --color-bg-alt: var(--color-bg-alt-light);
+  --color-surface: var(--color-surface-light);
+  --color-surface-hover: var(--color-surface-hover-light);
+  --color-surface-active: var(--color-surface-active-light);
+  --color-text: var(--color-text-light);
+  --color-text-secondary: var(--color-text-secondary-light);
+  --color-text-tertiary: var(--color-text-tertiary-light);
+  --color-accent: var(--color-accent-light);
+  --color-accent-alt: var(--color-accent-alt-light);
+  --color-cursor: var(--color-cursor-light);
+  --color-border: var(--color-border-light);
+  --color-recording: var(--color-recording-light);
+  --color-success: var(--color-success-light);
+  --glass-bg: var(--glass-bg-light);
+  --glass-border: var(--glass-border-light);
+  --glass-highlight: var(--glass-highlight-light);
+  --glass-shadow: var(--glass-shadow-light);
+  --glass-recording-bg: var(--glass-recording-bg-light);
+  --glass-recording-border: var(--glass-recording-border-light);
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0,0,0,0.03);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0,0,0,0.05);
+
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.45s ease;
+  --transition-tabs: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-mono: 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  --footer-height: auto; /* Adjusted for new button layout */
+  --live-footer-height: 350px; 
+
+  /* Button Colors from Image */
+  --button-start-bg: #1A3B8E;
+  --button-control-bg: #B0B8C0; /* For Pause, Resume, Stop */
+  --button-upload-bg: #3DDC84;
+  --button-utility-bg: #D1D5DB; /* A slightly different grey for utility buttons in light mode */
+  --button-text-color: #FFFFFF;
+}
+
+body:not(.light-mode) {
+  --color-bg: var(--color-bg-dark);
+  --color-bg-alt: var(--color-bg-alt-dark);
+  --color-surface: var(--color-surface-dark);
+  --color-surface-hover: var(--color-surface-hover-dark);
+  --color-surface-active: var(--color-surface-active-dark);
+  --color-text: var(--color-text-dark);
+  --color-text-secondary: var(--color-text-secondary-dark);
+  --color-text-tertiary: var(--color-text-tertiary-dark);
+  --color-accent: var(--color-accent-dark);
+  --color-accent-alt: var(--color-accent-alt-dark);
+  --color-cursor: var(--color-cursor-dark);
+  --color-border: var(--color-border-dark);
+  --color-recording: var(--color-recording-dark);
+  --color-success: var(--color-success-dark);
+  --glass-bg: var(--glass-bg-dark);
+  --glass-border: var(--glass-border-dark);
+  --glass-highlight: var(--glass-highlight-dark);
+  --glass-shadow: var(--glass-shadow-dark);
+  --glass-recording-bg: var(--glass-recording-bg-dark);
+  --glass-recording-border: var(--glass-recording-border-dark);
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --button-utility-bg: #4B5563; /* Darker grey for utility buttons in dark mode */
+}
+
+
+[contenteditable] {
+  caret-color: var(--color-cursor);
+}
+[contenteditable][placeholder].placeholder-active {
+  color: var(--color-text-tertiary);
+  opacity: 0.8;
+}
+
+html {
+  height: 100%;
+  overflow: hidden; 
+}
+
+body {
+  font-family: var(--font-primary);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.65;
+  height: 100vh; 
+  overflow: hidden; 
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+  margin: 0;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%; 
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden; 
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative; 
+  overflow: hidden; 
+  transition: padding-bottom var(--transition-slow) ease-in-out; 
+}
+
+.main-content:has(> .recording-interface.is-live) {
+  padding-bottom: var(--live-footer-height);
+}
+
+.note-area {
+  flex: 1; 
+  overflow: hidden; 
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg);
+  padding: 32px 0 0;
+  transition: background-color var(--transition-normal);
+  min-height: 0; 
+}
+
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px 16px;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 12px;
+  transition: border-color var(--transition-normal);
+}
+
+.editor-title {
+  font-size: 22px;
+  font-weight: 600;
+  outline: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+  margin-right: 24px;
+  color: var(--color-text);
+  font-family: var(--font-primary);
+  background-color: transparent;
+}
+
+.tab-navigation-container {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  padding: 4px;
+  display: inline-flex;
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--transition-normal), border-color var(--transition-normal);
+}
+
+.tab-navigation {
+  display: flex;
+  position: relative;
+  border-radius: 7px;
+  overflow: hidden;
+  width: 100%; /* Ensure container takes available width */
+}
+
+.tab-button {
+  background: transparent;
+  border: none;
+  padding: 6px 16px;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  font-family: var(--font-primary);
+  letter-spacing: -0.01em;
+  flex: 1; /* Make tabs equal width */
+  text-align: center; /* Center text within tabs */
+}
+
+.tab-button:hover {
+  color: var(--color-text);
+}
+
+.tab-button.active {
+  color: var(--color-text);
+}
+
+body.light-mode .tab-button {
+    color: var(--color-text-secondary);
+}
+body.light-mode .tab-button:hover {
+    color: var(--color-text);
+}
+body.light-mode .tab-button.active {
+  color: var(--color-text);
+}
+
+.active-tab-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background-color: var(--glass-highlight);
+  border-radius: 6px;
+  transition: left var(--transition-tabs), width var(--transition-tabs);
+  z-index: 0;
+  box-shadow: 0 0.5px 1.5px rgba(0,0,0,0.04), 0 0 0 0.5px rgba(0,0,0,0.02) inset;
+}
+
+body:not(.light-mode) .active-tab-indicator {
+  box-shadow: 0 0.5px 1.5px rgba(0,0,0,0.06), 0 0 0 0.5px rgba(0,0,0,0.03) inset;
+}
+
+.note-content-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 40px 40px;
+  position: relative;
+  min-height: 0;
+}
+
+.note-content {
+  outline: none;
+  min-height: 100px;
+  font-size: 14.5px; 
+  line-height: 1.6;  
+  color: var(--color-text);
+  padding: 12px 0;
+  font-family: var(--font-primary);
+  letter-spacing: -0.01em;
+
+  opacity: 0;
+  transform: scale(0.985) translateY(8px);
+  transition: opacity var(--transition-tabs), transform var(--transition-tabs);
+  display: none;
+  will-change: opacity, transform;
+
+  white-space: pre-wrap; 
+  word-wrap: break-word; 
+}
+
+#medTopicContent {
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between MedTopic sections */
+}
+
+.medtopic-section {
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background-color: var(--color-surface); /* Slightly different background for section */
+  box-shadow: var(--shadow-sm);
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0; 
+}
+
+#medTopicCheckbox,
+#useUploadedTopicDataCheckbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--color-accent); 
+  border: 1px solid var(--color-border); 
+  border-radius: 3px;
+}
+
+#medTopicCheckbox:focus,
+#useUploadedTopicDataCheckbox:focus {
+  outline: 2px solid var(--color-accent-alt);
+  outline-offset: 2px;
+}
+
+.checkbox-container label {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.medtopic-button { /* Style for Upload Topic File button */
+  width: 100%;
+  margin-bottom: 8px; /* Space below the button */
+}
+
+#topicFileNameDisplay { /* Style for topic file name display */
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  margin-top: 0px; /* Adjusted from .file-name-display */
+  margin-bottom: 8px; /* Space below file name */
+  min-height: 1.2em;
+  display: block;
+  width: 100%;
+  text-align: left; /* Align to left to match other labels */
+  padding-left: 2px;
+}
+
+.medtopic-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: 8px;
+}
+
+.medtopic-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background-color: var(--color-bg-alt);
+  color: var(--color-text);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  resize: vertical;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.medtopic-textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  background-color: var(--color-surface);
+}
+
+
+.note-content.active {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  display: block; /* Default is flex for #medTopicContent, so this keeps it block for active state */
+}
+#medTopicContent.active {
+  display: flex; /* Override general .note-content.active to keep it flex */
+}
+
+
+.note-content h1, .note-content h2, .note-content h3 { margin-bottom: 0.75em; margin-top: 1.25em; font-weight: 600; color: var(--color-text); }
+.note-content h1 { font-size: 1.8em; } 
+.note-content h2 { font-size: 1.5em; } 
+.note-content h3 { font-size: 1.25em; } 
+.note-content p { margin-bottom: 1em; }
+.note-content ul, .note-content ol { margin-bottom: 1em; padding-left: 1.5em; }
+.note-content li { margin-bottom: 0.5em; }
+.note-content pre { background-color: var(--color-bg-alt); padding: 1em; border-radius: 8px; margin-bottom: 1em; font-size: 0.9em; overflow-x: auto; transition: background-color var(--transition-normal); font-family: var(--font-mono); }
+.note-content code { font-family: var(--font-mono); background-color: var(--color-bg-alt); padding: 0.2em 0.4em; border-radius: 4px; font-size: 0.9em;}
+.note-content pre code { background-color: transparent; padding: 0; border-radius: 0;}
+
+
+.recording-interface {
+  height: var(--footer-height);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 20px 24px; 
+  background-color: transparent;
+  border-top: 1px solid transparent;
+  flex-shrink: 0;
+  transition: opacity 0.3s ease-out, transform 0.35s ease-out,
+              background-color var(--transition-slow) ease-in-out,
+              height var(--transition-slow) ease-in-out;
+  z-index: 10;
+}
+
+.recording-interface.is-live {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--live-footer-height);
+  z-index: 1000;
+  background-color: var(--glass-recording-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--glass-recording-border);
+  box-shadow: 0 -4px 20px var(--glass-shadow);
+  justify-content: flex-start;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.status-indicator { margin-bottom: 12px; } 
+.recording-interface.is-live .status-indicator { display: block; position: absolute; top: 10px; left: 50%; transform: translateX(-50%);}
+.status-text { font-size: 13px; color: var(--color-text-tertiary); text-align: center; transition: color var(--transition-normal); font-family: var(--font-primary); }
+
+.live-recording-title,
+#liveWaveformCanvas,
+.live-recording-timer {
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 0.3s ease-out 0.1s, transform 0.35s ease-out 0.1s;
+}
+
+.recording-interface.is-live .live-recording-title,
+.recording-interface.is-live #liveWaveformCanvas,
+.recording-interface.is-live .live-recording-timer {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.live-recording-title {
+  font-size: 17px;
+  color: var(--color-text);
+  margin-bottom: 12px;
+  text-align: center;
+  font-weight: 500;
+  font-family: var(--font-primary);
+}
+
+#liveWaveformCanvas {
+  width: 100%;
+  max-width: 340px;
+  height: 70px;
+  margin-bottom: 18px;
+  border-radius: 4px;
+}
+
+.live-recording-timer {
+  font-family: var(--font-mono);
+  font-size: 44px;
+  font-weight: 400;
+  color: var(--color-text);
+  margin-bottom: 22px;
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+
+.recording-controls {
+  display: flex;
+  flex-direction: column; 
+  align-items: stretch; 
+  justify-content: center;
+  gap: 10px; 
+  width: 100%;
+  max-width: 360px; 
+  margin: 0 auto; 
+}
+
+.record-control-button {
+  border: none;
+  border-radius: 8px; 
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--button-text-color);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast), opacity var(--transition-fast);
+  width: 100%; 
+  text-align: center;
+  font-family: var(--font-primary);
+}
+
+.record-control-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+.record-control-button:active:not(:disabled) {
+  transform: translateY(0px);
+  filter: brightness(0.95);
+}
+
+.record-control-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.button-start { background-color: var(--button-start-bg); }
+.button-pause { background-color: var(--button-control-bg); }
+.button-resume { background-color: var(--button-control-bg); }
+.button-stop { background-color: var(--button-control-bg); }
+.button-upload { background-color: var(--button-upload-bg); }
+
+.pause-resume-container {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+.pause-resume-container .record-control-button {
+  flex: 1; 
+}
+
+.file-name-display {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  text-align: center;
+  margin-top: 4px; 
+  min-height: 1.2em; 
+  display: block;
+  width: 100%;
+}
+
+.utility-buttons-container {
+  display: flex;
+  gap: 10px; /* Space between Copy and Theme Toggle */
+  width: 100%;
+  margin-top: 2px; /* Small space above this row */
+}
+
+.utility-buttons-container .record-control-button {
+  flex: 1; /* Each button takes half the space */
+}
+
+.button-utility {
+  background-color: var(--button-utility-bg);
+  color: var(--color-text); /* Text color set based on theme */
+}
+
+body:not(.light-mode) .button-utility {
+    color: var(--color-text-dark); /* Ensure text is visible in dark mode */
+}
+body.light-mode .button-utility {
+    color: var(--color-text-light); /* Ensure text is visible in light mode */
+}
+
+
+/* Old button styles - to be removed or adapted if 'action-button' is used elsewhere */
+.action-button {
+  /* This class is now used for hidden Theme/New Note buttons. */
+  /* If they are reinstated elsewhere, these styles might be a starting point. */
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px; 
+  padding: 8px 16px; 
+  display: flex; align-items: center; justify-content: center;
+  color: var(--color-text-secondary); 
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-fast) background-color, var(--transition-fast) color, var(--transition-fast) border-color, var(--transition-fast) transform, var(--transition-fast) box-shadow;
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  white-space: nowrap;
+}
+.action-button:hover:not(:disabled) {
+  color: var(--color-text);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--shadow-md);
+  background-color: var(--color-surface-hover);
+  border-color: var(--glass-highlight);
+}
+.action-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.record-waves { display: none; } 
+
+
+.hidden {
+  display: none !important;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--color-bg-alt); border-radius: 5px; }
+::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 5px; border: 2px solid transparent; background-clip: content-box; }
+::-webkit-scrollbar-thumb:hover { background: var(--glass-highlight); }
+
+.debug-panel { background-color: rgba(0, 0, 0, 0.95); color: #33ff33; font-family: var(--font-mono); font-size: 12px; padding: 12px; position: fixed; bottom: 0; left: 0; max-height: 200px; width: 100%; z-index: 2000; overflow-y: auto; display: none; }
+.debug-panel.visible { display: block; }
+
+
+@media (max-width: 768px) {
+  .note-area { padding: 20px 0 0; }
+  .note-header { padding: 0 20px 12px; flex-direction: column; align-items: stretch; gap: 12px; }
+  .editor-title { padding: 0; font-size: 20px; margin-bottom: 0; margin-right: 0; text-align: left; }
+  .tab-navigation-container { width: 100%; }
+  /* .tab-navigation { width: 100%; } */ /* Handled by parent */
+  /* .tab-button { flex-grow: 1; text-align: center; } */ /* Already set */
+  .note-content-wrapper { padding: 0 20px 20px; }
+  .recording-interface.is-live { padding-left: 15px; padding-right: 15px; }
+  #liveWaveformCanvas { max-width: calc(100% - 30px); height: 60px; }
+  .live-recording-timer { font-size: 36px; }
+  
+  .recording-controls { 
+    max-width: 90%; 
+    gap: 8px;
+  }
+  .record-control-button {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+  .utility-buttons-container {
+    gap: 8px;
+  }
+
+  #medTopicContent {
+    gap: 15px;
+  }
+  .medtopic-section {
+    padding: 8px;
+  }
+  .medtopic-textarea {
+    min-height: 80px;
+  }
+}
